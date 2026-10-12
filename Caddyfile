@@ -1,0 +1,29 @@
+phosphor.betaporter.dev {
+	reverse_proxy phosphor-relay:8080
+}
+
+onebighead.com {
+	reverse_proxy onebighead:8080
+}
+
+www.onebighead.com {
+	redir https://onebighead.com{uri} permanent
+}
+
+bryanporter.com {
+	# RAGBRAI photo map — separate container. handle_path strips the /ragbrai
+	# prefix so the ragbrai container serves at its own root.
+	redir /ragbrai /ragbrai/ permanent
+	handle_path /ragbrai/* {
+		reverse_proxy ragbrai:80
+	}
+
+	# Everything else — the Jekyll business-card site.
+	handle {
+		reverse_proxy bryanporter:80
+	}
+}
+
+www.bryanporter.com {
+	redir https://bryanporter.com{uri} permanent
+}
